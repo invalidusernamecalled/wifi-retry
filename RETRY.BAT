@@ -13,25 +13,24 @@ for /f "tokens=* delims= " %%A in ("%CURRENT_WIFI%") do set CURRENT_WIFI=%%A
 :: Check if a network name was found
 if "%CURRENT_WIFI%"=="" (
     echo No Wi-Fi network is currently connected.
-    echo Please specify a network manually or reconnect later.
     pause
-    goto :manual
+    goto :eof
 ) else (
 echo YOU WERE PREVIOUSLY CONNECTED: "%CURRENT_WIFI%" bye bye.. disconnecting
+timeout 1 >NUL
 )
-CLS
+echo:
 COLOR 74
 :: Disconnect and reconnect to the current network
 netsh wlan disconnect
 timeout /t 5 > nul
 echo:
-CLS
 COLOR 03
 echo:RECONNECTING...
 echo on
 netsh wlan connect name="%CURRENT_WIFI%"
 @echo off
-if %errorlevel%==0 CLS & echo Done!
+if %errorlevel%==0 echo: & echo Done!
 :END
 echo:
 timeout 5
